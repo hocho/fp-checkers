@@ -2,7 +2,10 @@ module Main where
 
 import Game
     (
-        boardInitial
+        Board
+    ,   Move
+    ,   Player
+    ,   boardInitial
     ,   boardDisplay    
     ,   movesGet
     ,   movesDisplay
@@ -13,16 +16,27 @@ import Game
 
 main :: IO ()
 main = do
-    let
-        board = boardInitial ()
-        moves1 = movesGet board player1
-        move = head moves1 
-        newBoard = movePlay board move
-        moves2 = movesGet newBoard player2 
-        move2 = head moves2
-        newBoard2 = movePlay newBoard move2
-    boardDisplay board
-    movesDisplay moves1
-    boardDisplay newBoard
-    boardDisplay newBoard2
- 
+    let 
+        board = boardInitial()
+    do 
+        boardDisplay board
+        playGame 
+            board 
+            player1 
+            (movesGet board player1)
+
+playGame :: Board -> Player -> [Move] -> IO()
+playGame board player [] = do
+    return ()
+playGame board player moves = do
+    let 
+        nextMove = head moves
+        newBoard = movePlay board nextMove
+        nextPlayer = if player == player1 then player2 else player1
+        nextMoves = movesGet newBoard nextPlayer
+    do
+        print nextMove
+        boardDisplay newBoard
+        playGame newBoard nextPlayer nextMoves
+
+            

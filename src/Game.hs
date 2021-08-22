@@ -1,5 +1,8 @@
  module Game
-    (   boardInitial
+    (   Board
+    ,   Move
+    ,   Player
+    ,   boardInitial
     ,   boardDisplay
     ,   movesGet
     ,   movesDisplay
@@ -171,11 +174,6 @@ movesDisplay (move : moves) = do
     print move
     movesDisplay moves
 
-
-
--- Game
--- 	Board
--- 	Player PlayerToMov
 
 -- Jump
 -- 	From Location
