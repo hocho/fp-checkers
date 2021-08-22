@@ -3,6 +3,7 @@
     ,   boardDisplay
     ,   movesGet
     ,   movesDisplay
+    ,   movePlay
     ,   player1
     ,   player2
     ) where
@@ -109,21 +110,6 @@ isValidMove board movePlayer move =
             &&  isFromPieceOfPlayer
             &&  isNothing(boardPiece board (to move))
 
-
-boardDisplay :: Board -> IO()
-boardDisplay [] = do
-    putStrLn ""
-boardDisplay (x : xs) = do
-    rowDisplay x
-    boardDisplay xs
-
-rowDisplay :: BoardRow -> IO()
-rowDisplay [] = do
-    putStrLn "|"
-rowDisplay (x : xs) = do
-    putStr $ "|" ++ maybe " " show x
-    rowDisplay xs
-
 movesGet :: Board -> Player -> [Move]
 movesGet board player =
     filter (isValidMove board player) moves
@@ -139,6 +125,45 @@ movesGet board player =
             ]
         moves = concat $ [createMoves (row, col) | row <- [0 .. boardSize], col <- [0 .. boardSize]]
 
+-- Updates a row 
+rowUpdate :: BoardRow -> Int -> Maybe Piece -> BoardRow
+rowUpdate boardRow col piece =
+    let
+        (l, r) = splitAt col boardRow
+    in
+        l ++ piece : tail r
+
+-- Assumes that hte move is a valid move
+movePlay :: Board -> Move -> Board
+movePlay board move =
+    let
+        movePiece = boardPiece board (from move)
+    in
+        map
+            (\(row, idx) ->
+                if idx == fst (from move) then
+                    rowUpdate row (snd(from move)) Nothing
+                else if idx == fst (to move) then
+                    rowUpdate row (snd(to move)) movePiece
+                else
+                    row
+                ) 
+            $ zip board [0 .. ] 
+
+boardDisplay :: Board -> IO()
+boardDisplay [] = do
+    putStrLn ""
+boardDisplay (x : xs) = do
+    rowDisplay x
+    boardDisplay xs
+
+rowDisplay :: BoardRow -> IO()
+rowDisplay [] = do
+    putStrLn "|"
+rowDisplay (x : xs) = do
+    putStr $ "|" ++ maybe " " show x
+    rowDisplay xs
+
 movesDisplay :: [Move] -> IO()
 movesDisplay [] = do
     putStrLn ""
@@ -146,13 +171,7 @@ movesDisplay (move : moves) = do
     print move
     movesDisplay moves
 
--- Board 
--- 	Squares Piece?[][]
--- 	Move[] GetNextMoves(Player)
--- 	IsOnBoard()
--- 	IsOccupied()
--- 	IsOccupiedByOpponent()
--- 	IsValidMove()
+
 
 -- Game
 -- 	Board
