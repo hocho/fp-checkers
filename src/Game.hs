@@ -1,15 +1,7 @@
+{-# LANGUAGE MultiWayIf #-}
+
  module Game
-    (   Board
-    ,   Move
-    ,   Player
-    ,   boardInitial
-    ,   boardDisplay
-    ,   movesGet
-    ,   movesDisplay
-    ,   movePlay
-    ,   player1
-    ,   player2
-    ) where
+    where
 
 import Data.Maybe
 
@@ -74,6 +66,8 @@ type Board = [BoardRow]
 player1 = Player { color = Black, side = North }
 player2 = Player { color = White, side = South }
 
+otherPlayer player = if player == player1 then player2 else player1
+
 pawn1 = Just Piece { player = player1, pieceType = Pawn}
 pawn2 = Just Piece { player = player2, pieceType = Pawn}
 
@@ -128,6 +122,47 @@ movesGet board player =
             ]
         moves = concat $ [createMoves (row, col) | row <- [0 .. boardSize], col <- [0 .. boardSize]]
 
+isValidJump :: Board -> Player -> Move -> Bool
+isValidJump board movePlayer move =
+        let
+            fromPiece = boardPiece board (from move)
+            isFromPieceOfPlayer =
+                case fromPiece of
+                Just p
+                    ->  player p == movePlayer
+                Nothing
+                    ->  False
+            avgTuple tp1 tp2 fn = div (fn tp1 + fn tp2) 2
+            jumpOverPosition = (avgTuple (to move) (from move) fst, avgTuple (to move) (from move) snd)
+            jumpOverPiece = boardPiece board jumpOverPosition
+            isJumpOverPieceOfOpponent =
+                case jumpOverPiece of
+                Just p
+                    ->  player p == otherPlayer movePlayer
+                Nothing
+                    ->  False
+        in
+                isValidPosition (from move)
+            &&  isValidPosition (to move)
+            &&  isFromPieceOfPlayer
+            &&  isNothing(boardPiece board (to move))
+            &&  isJumpOverPieceOfOpponent
+
+jumpsGet :: Board -> Player -> [Move]
+jumpsGet board player =
+    filter (isValidJump board player) moves
+    where
+        delta = case side player of
+            North -> 2
+            South -> -2
+        createJump (row, col) deltaCol =
+            Move { from = (row, col), to = (row + delta, col + deltaCol) }
+        createMoves position =
+            [   createJump position (-2) 
+            ,   createJump position 2 
+            ]
+        moves = concat $ [createMoves (row, col) | row <- [0 .. boardSize], col <- [0 .. boardSize]]
+
 -- Updates a row 
 rowUpdate :: BoardRow -> Int -> Maybe Piece -> BoardRow
 rowUpdate boardRow col piece =
@@ -144,13 +179,14 @@ movePlay board move =
     in
         map
             (\(row, idx) ->
-                if idx == fst (from move) then
-                    rowUpdate row (snd(from move)) Nothing
-                else if idx == fst (to move) then
-                    rowUpdate row (snd(to move)) movePiece
-                else
-                    row
-                ) 
+                if 
+                |   idx == fst (from move) -> 
+                        rowUpdate row (snd(from move)) Nothing
+                |   idx == fst (to move) ->
+                        rowUpdate row (snd(to move)) movePiece
+                |   otherwise ->
+                        row
+            )
             $ zip board [0 .. ] 
 
 boardDisplay :: Board -> IO()

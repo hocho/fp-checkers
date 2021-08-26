@@ -5,8 +5,13 @@ import Game
         Board
     ,   Move
     ,   Player
+    ,   Color
+    ,   color
+    ,   from
+    ,   to
+    ,   otherPlayer
     ,   boardInitial
-    ,   boardDisplay    
+    ,   boardDisplay
     ,   movesGet
     ,   movesDisplay
     ,   movePlay
@@ -16,27 +21,33 @@ import Game
 
 main :: IO ()
 main = do
-    let 
+    let
         board = boardInitial()
-    do 
-        boardDisplay board
-        playGame 
-            board 
-            player1 
-            (movesGet board player1)
-
-playGame :: Board -> Player -> [Move] -> IO()
-playGame board player [] = do
-    return ()
-playGame board player moves = do
-    let 
-        nextMove = head moves
-        newBoard = movePlay board nextMove
-        nextPlayer = if player == player1 then player2 else player1
-        nextMoves = movesGet newBoard nextPlayer
     do
-        print nextMove
-        boardDisplay newBoard
-        playGame newBoard nextPlayer nextMoves
+        boardDisplay board
+        playGame
+            board
+            player1
 
-            
+playGame :: Board -> Player -> IO()
+playGame board player = do
+    let
+        moves = movesGet board player
+    do
+        case moves of 
+            [] ->
+                return ()
+            _ -> do
+                let 
+                    nextMove = head moves
+                    newBoard = movePlay board nextMove
+                    nextPlayer = otherPlayer player
+                do
+                    putStr $ show (color player) ++ " "
+                    putStrLn $ formatMove nextMove
+                    putStrLn ""
+                    boardDisplay newBoard
+                    playGame newBoard nextPlayer
+
+formatMove ::  Move -> String
+formatMove move = show (from move) ++ " -> " ++ show(to move)
