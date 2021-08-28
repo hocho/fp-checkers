@@ -27,6 +27,9 @@ library
   exposed-modules:
       Game
       Lib
+      Move
+      MoveJump
+      MoveSingle
   other-modules:
       Paths_fp_checkers
   hs-source-dirs:

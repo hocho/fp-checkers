@@ -1,4 +1,5 @@
 {-# LANGUAGE MultiWayIf #-}
+{-# LANGUAGE DeriveAnyClass #-}
 
  module Game
     where
@@ -53,13 +54,7 @@ isValidPosition (row, col) =
                 x >= 0
             &&  
                 x < boardSize
-
-data Move = Move
-    {   from :: Position
-    ,   to :: Position
-    }
-    deriving (Show)
-
+    
 type BoardRow = [Maybe Piece]
 type Board = [BoardRow]
 
@@ -91,103 +86,47 @@ boardInitial () =
 boardPiece :: Board -> Position -> Maybe Piece
 boardPiece board (row, col) = board !! row !! col
 
-isValidMove :: Board -> Player -> Move -> Bool
-isValidMove board movePlayer move =
-        let
-            fromPiece = boardPiece board (from move)
-            isFromPieceOfPlayer =
-                case fromPiece of
-                Just p
-                    ->  player p == movePlayer
-                Nothing
-                    ->  False
-        in
-                isValidPosition (from move)
-            &&  isValidPosition (to move)
-            &&  isFromPieceOfPlayer
-            &&  isNothing(boardPiece board (to move))
+-- isValidJump :: Board -> Player -> Move -> Bool
+-- isValidJump board movePlayer move =
+--         let
+--             fromPiece = boardPiece board (from move)
+--             isFromPieceOfPlayer =
+--                 case fromPiece of
+--                 Just p
+--                     ->  player p == movePlayer
+--                 Nothing
+--                     ->  False
+--             avgTuple tp1 tp2 fn = div (fn tp1 + fn tp2) 2
+--             jumpOverPosition = (avgTuple (to move) (from move) fst, avgTuple (to move) (from move) snd)
+--             jumpOverPiece = boardPiece board jumpOverPosition
+--             isJumpOverPieceOfOpponent =
+--                 case jumpOverPiece of
+--                 Just p
+--                     ->  player p == otherPlayer movePlayer
+--                 Nothing
+--                     ->  False
+--         in
+--                 isValidPosition (from move)
+--             &&  isValidPosition (to move)
+--             &&  isFromPieceOfPlayer
+--             &&  isNothing(boardPiece board (to move))
+--             &&  isJumpOverPieceOfOpponent
 
-movesGet :: Board -> Player -> [Move]
-movesGet board player =
-    filter (isValidMove board player) moves
-    where
-        delta = case side player of
-            North -> 1
-            South -> -1
-        createMove (row, col) deltaCol =
-            Move { from = (row, col), to = (row + delta, col + deltaCol) }
-        createMoves position =
-            [   createMove position (-1) 
-            ,   createMove position 1 
-            ]
-        moves = concat $ [createMoves (row, col) | row <- [0 .. boardSize], col <- [0 .. boardSize]]
+-- jumpsGet :: Board -> Player -> [Move]
+-- jumpsGet board player =
+--     filter (isValidJump board player) moves
+--     where
+--         delta = case side player of
+--             North -> 2
+--             South -> -2
+--         createJump (row, col) deltaCol =
+--             Move { from = (row, col), to = (row + delta, col + deltaCol) }
+--         createMoves position =
+--             [   createJump position (-2) 
+--             ,   createJump position 2 
+--             ]
+--         moves = concat $ [createMoves (row, col) | row <- [0 .. boardSize], col <- [0 .. boardSize]]
 
-isValidJump :: Board -> Player -> Move -> Bool
-isValidJump board movePlayer move =
-        let
-            fromPiece = boardPiece board (from move)
-            isFromPieceOfPlayer =
-                case fromPiece of
-                Just p
-                    ->  player p == movePlayer
-                Nothing
-                    ->  False
-            avgTuple tp1 tp2 fn = div (fn tp1 + fn tp2) 2
-            jumpOverPosition = (avgTuple (to move) (from move) fst, avgTuple (to move) (from move) snd)
-            jumpOverPiece = boardPiece board jumpOverPosition
-            isJumpOverPieceOfOpponent =
-                case jumpOverPiece of
-                Just p
-                    ->  player p == otherPlayer movePlayer
-                Nothing
-                    ->  False
-        in
-                isValidPosition (from move)
-            &&  isValidPosition (to move)
-            &&  isFromPieceOfPlayer
-            &&  isNothing(boardPiece board (to move))
-            &&  isJumpOverPieceOfOpponent
-
-jumpsGet :: Board -> Player -> [Move]
-jumpsGet board player =
-    filter (isValidJump board player) moves
-    where
-        delta = case side player of
-            North -> 2
-            South -> -2
-        createJump (row, col) deltaCol =
-            Move { from = (row, col), to = (row + delta, col + deltaCol) }
-        createMoves position =
-            [   createJump position (-2) 
-            ,   createJump position 2 
-            ]
-        moves = concat $ [createMoves (row, col) | row <- [0 .. boardSize], col <- [0 .. boardSize]]
-
--- Updates a row 
-rowUpdate :: BoardRow -> Int -> Maybe Piece -> BoardRow
-rowUpdate boardRow col piece =
-    let
-        (l, r) = splitAt col boardRow
-    in
-        l ++ piece : tail r
-
--- Assumes that hte move is a valid move
-movePlay :: Board -> Move -> Board
-movePlay board move =
-    let
-        movePiece = boardPiece board (from move)
-    in
-        map
-            (\(row, idx) ->
-                if 
-                |   idx == fst (from move) -> 
-                        rowUpdate row (snd(from move)) Nothing
-                |   idx == fst (to move) ->
-                        rowUpdate row (snd(to move)) movePiece
-                |   otherwise ->
-                        row
-            )
-            $ zip board [0 .. ] 
 
 boardDisplay :: Board -> IO()
 boardDisplay [] = do
@@ -202,14 +141,6 @@ rowDisplay [] = do
 rowDisplay (x : xs) = do
     putStr $ "|" ++ maybe " " show x
     rowDisplay xs
-
-movesDisplay :: [Move] -> IO()
-movesDisplay [] = do
-    putStrLn ""
-movesDisplay (move : moves) = do
-    print move
-    movesDisplay moves
-
 
 -- Jump
 -- 	From Location
