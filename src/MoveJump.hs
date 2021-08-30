@@ -6,20 +6,17 @@
 
 import Move
     (   MoveJump(..)
-    ,   MovePlayer(..)
+    ,   Move_(..)
     )
 
 import Game
     (   Board
     ,   Player(..)
-    ,   Color(..)
     ,   Side(..)
     ,   Piece(..)
     ,   BoardRow
     ,   boardSize
     ,   isValidPosition
-    ,   otherPlayer
-    ,   boardInitial
     ,   boardPiece
     )
     
@@ -57,7 +54,7 @@ movesJumpGet board player =
         moves = concat $ [createMoves (row, col) | row <- [0 .. boardSize], col <- [0 .. boardSize]]
 
 
-instance MovePlayer MoveJump where 
+instance Move_ MoveJump where 
     movePlay :: Board -> MoveJump -> Board  
     movePlay board move =
         let

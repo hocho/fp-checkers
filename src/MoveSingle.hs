@@ -6,20 +6,18 @@
 
 import Move
     (   MoveSingle(..)
-    ,   MovePlayer(..)
+    ,   Move(..)
+    ,   Move_(..)
     )
 
 import Game
     (   Board
     ,   Player(..)
-    ,   Color(..)
     ,   Side(..)
     ,   Piece(..)
     ,   BoardRow
     ,   boardSize
     ,   isValidPosition
-    ,   otherPlayer
-    ,   boardInitial
     ,   boardPiece
     )
     
@@ -56,8 +54,7 @@ movesSingleGet board player =
             ]
         moves = concat $ [createMoves (row, col) | row <- [0 .. boardSize], col <- [0 .. boardSize]]
 
-
-instance MovePlayer MoveSingle where 
+instance Move_ MoveSingle where 
     movePlay :: Board -> MoveSingle -> Board  
     movePlay board move =
         let

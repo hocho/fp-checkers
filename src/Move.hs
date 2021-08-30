@@ -1,6 +1,7 @@
 {-# LANGUAGE DeriveAnyClass #-}
 {-# OPTIONS_GHC -Wno-missing-methods #-}
 {-# LANGUAGE InstanceSigs #-}
+{-# LANGUAGE ExistentialQuantification #-}
 
  module Move
     where
@@ -12,9 +13,11 @@ import Game
 
 import Data.Maybe
 
-class MovePlayer a where
+class Move_ a where
     movePlay :: Board -> a -> Board
     moveShow :: a -> String
+
+data Move = forall a. Move_ a => Move a
 
 data MoveSingle = MoveSingle
     {   from :: Position
@@ -28,9 +31,9 @@ data MoveJump = MoveJump
     }
     deriving (Show)
 
-data Move 
-    =   MoveSingleCtor MoveSingle
-    |   MoveJumpCtor MoveJump 
+-- data Move 
+--     =   MoveSingleCtor MoveSingle
+--     |   MoveJumpCtor MoveJump 
 
 movesDisplay :: [MoveSingle] -> IO()
 movesDisplay [] = do

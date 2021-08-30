@@ -1,5 +1,3 @@
-{-# LANGUAGE InstanceSigs #-}
-
 module Main where
 
 import Game
@@ -17,13 +15,13 @@ import Game
 
 import Move
     (   Move(..)
-    ,   MovePlayer(..)
-    ,   movePlay
-    ,   moveShow
+    ,   Move_(..)
     )
 
 import MoveSingle
 import MoveJump
+
+import Data.List
 
 main :: IO ()
 main = do
@@ -36,20 +34,19 @@ main = do
             player1
 
 movesGet :: Board -> Player -> [Move]
-movesGet board player =
-    map MoveSingleCtor $ movesSingleGet board player
+movesGet board player = map Move $ movesSingleGet board player
 
 playGame :: Board -> Player -> IO()
 playGame board player = do
     let
         moves = movesGet board player
+        move = uncons moves
     do
-        case moves of 
-            [] ->
+        case move of
+            Nothing ->
                 return ()
-            _ -> do
-                let 
-                    nextMove = head moves
+            Just ((Move nextMove), _) -> do
+                let
                     newBoard = movePlay board nextMove
                     nextPlayer = otherPlayer player
                 do
@@ -58,19 +55,3 @@ playGame board player = do
                     putStrLn ""
                     boardDisplay newBoard
                     playGame newBoard nextPlayer
-
-instance MovePlayer Move where 
-    movePlay :: Board -> Move -> Board  
-    movePlay board move =
-        case move of 
-            MoveSingleCtor single ->
-                 movePlay board single
-            MoveJumpCtor jump ->
-                movePlay board jump
-    moveShow :: Move -> String 
-    moveShow move = 
-        case move of 
-            MoveSingleCtor single ->
-                 moveShow single
-            MoveJumpCtor jump ->
-                moveShow jump
