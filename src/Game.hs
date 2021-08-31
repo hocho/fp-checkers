@@ -86,48 +86,6 @@ boardInitial () =
 boardPiece :: Board -> Position -> Maybe Piece
 boardPiece board (row, col) = board !! row !! col
 
--- isValidJump :: Board -> Player -> Move -> Bool
--- isValidJump board movePlayer move =
---         let
---             fromPiece = boardPiece board (from move)
---             isFromPieceOfPlayer =
---                 case fromPiece of
---                 Just p
---                     ->  player p == movePlayer
---                 Nothing
---                     ->  False
---             avgTuple tp1 tp2 fn = div (fn tp1 + fn tp2) 2
---             jumpOverPosition = (avgTuple (to move) (from move) fst, avgTuple (to move) (from move) snd)
---             jumpOverPiece = boardPiece board jumpOverPosition
---             isJumpOverPieceOfOpponent =
---                 case jumpOverPiece of
---                 Just p
---                     ->  player p == otherPlayer movePlayer
---                 Nothing
---                     ->  False
---         in
---                 isValidPosition (from move)
---             &&  isValidPosition (to move)
---             &&  isFromPieceOfPlayer
---             &&  isNothing(boardPiece board (to move))
---             &&  isJumpOverPieceOfOpponent
-
--- jumpsGet :: Board -> Player -> [Move]
--- jumpsGet board player =
---     filter (isValidJump board player) moves
---     where
---         delta = case side player of
---             North -> 2
---             South -> -2
---         createJump (row, col) deltaCol =
---             Move { from = (row, col), to = (row + delta, col + deltaCol) }
---         createMoves position =
---             [   createJump position (-2) 
---             ,   createJump position 2 
---             ]
---         moves = concat $ [createMoves (row, col) | row <- [0 .. boardSize], col <- [0 .. boardSize]]
-
-
 boardDisplay :: Board -> IO()
 boardDisplay [] = do
     putStrLn ""

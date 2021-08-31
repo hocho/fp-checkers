@@ -34,7 +34,10 @@ main = do
             player1
 
 movesGet :: Board -> Player -> [Move]
-movesGet board player = map Move $ movesSingleGet board player
+movesGet board player = 
+    (map Move $ movesJumpGet board player)
+    ++ 
+    (map Move $ movesSingleGet board player)
 
 playGame :: Board -> Player -> IO()
 playGame board player = do
