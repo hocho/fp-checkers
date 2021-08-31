@@ -5,8 +5,7 @@
     where
 
 import Move
-    (   MoveJump(..)
-    ,   Move_(..)
+    (   Move_(..)
     )
 
 import Game
@@ -15,6 +14,7 @@ import Game
     ,   Side(..)
     ,   Piece(..)
     ,   BoardRow
+    ,   Position
     ,   boardSize
     ,   isValidPosition
     ,   boardPiece
@@ -22,6 +22,12 @@ import Game
     )
     
 import Data.Maybe
+
+data MoveJump = MoveJump
+    {   fromX :: Position
+    ,   toX:: Position
+    }
+    deriving (Show)
 
 calcJumpedPosition :: Position -> Position -> Position 
 calcJumpedPosition p1 p2 = 
@@ -91,7 +97,7 @@ instance Move_ MoveJump where
                 $ zip board [0 .. ] 
 
     moveShow :: MoveJump -> String 
-    moveShow move = show (fromX move) ++ " -> " ++ show(toX move)
+    moveShow move = "Jump " ++ show (fromX move) ++ " -> " ++ show(toX move)
 
 -- Updates a row 
 rowUpdate :: BoardRow -> Int -> Maybe Piece -> BoardRow

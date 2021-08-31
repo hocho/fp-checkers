@@ -5,9 +5,7 @@
     where
 
 import Move
-    (   MoveSingle(..)
-    ,   Move(..)
-    ,   Move_(..)
+    (   Move_(..)
     )
 
 import Game
@@ -16,12 +14,19 @@ import Game
     ,   Side(..)
     ,   Piece(..)
     ,   BoardRow
+    ,   Position
     ,   boardSize
     ,   isValidPosition
     ,   boardPiece
     )
     
 import Data.Maybe
+
+data MoveSingle = MoveSingle
+    {   from :: Position
+    ,   to :: Position
+    }
+    deriving (Show)
 
 isValidMove :: Board -> Player -> MoveSingle -> Bool
 isValidMove board movePlayer move =
@@ -73,7 +78,7 @@ instance Move_ MoveSingle where
                 $ zip board [0 .. ] 
 
     moveShow :: MoveSingle -> String 
-    moveShow move = show (from move) ++ " -> " ++ show(to move)
+    moveShow move = "Move " ++ show (from move) ++ " -> " ++ show(to move)
 
 -- Updates a row 
 rowUpdate :: BoardRow -> Int -> Maybe Piece -> BoardRow
