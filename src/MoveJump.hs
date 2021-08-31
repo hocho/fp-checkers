@@ -41,10 +41,10 @@ isValidJump board movePlayer move =
             fromPiece = boardPiece board (fromX move)
             isFromPieceOfPlayer =
                 case fromPiece of
-                Just p
-                    ->  player p == movePlayer
-                Nothing
-                    ->  False
+                    Just p
+                        ->  player p == movePlayer
+                    Nothing
+                        ->  False
             jumpedOverPosition = calcJumpedPosition (fromX move) (toX move) 
             jumpOverPiece = boardPiece board jumpedOverPosition
             isJumpOverPieceOfOpponent =
@@ -98,6 +98,10 @@ instance Move_ MoveJump where
 
     moveShow :: MoveJump -> String 
     moveShow move = "Jump " ++ show (fromX move) ++ " -> " ++ show(toX move)
+
+    moveName :: MoveJump -> String
+    moveName move = "MoveJump"
+
 
 -- Updates a row 
 rowUpdate :: BoardRow -> Int -> Maybe Piece -> BoardRow

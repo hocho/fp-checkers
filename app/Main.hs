@@ -51,7 +51,10 @@ playGame board player = do
             Just ((Move nextMove), _) -> do
                 let
                     newBoard = movePlay board nextMove
-                    nextPlayer = otherPlayer player
+                    nextPlayer = 
+                        if moveName nextMove == "MoveSingle" 
+                            then otherPlayer player
+                            else player
                 do
                     putStr $ show (color player) ++ " "
                     putStrLn $ moveShow nextMove

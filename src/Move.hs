@@ -16,6 +16,7 @@ import Data.Maybe
 class Move_ a where
     movePlay :: Board -> a -> Board
     moveShow :: a -> String
+    moveName :: a -> String
 
 data Move = forall a. Move_ a => Move a
 

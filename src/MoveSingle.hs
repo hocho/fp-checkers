@@ -80,6 +80,9 @@ instance Move_ MoveSingle where
     moveShow :: MoveSingle -> String 
     moveShow move = "Move " ++ show (from move) ++ " -> " ++ show(to move)
 
+    moveName :: MoveSingle -> String
+    moveName move = "MoveSingle"
+
 -- Updates a row 
 rowUpdate :: BoardRow -> Int -> Maybe Piece -> BoardRow
 rowUpdate boardRow col piece =
