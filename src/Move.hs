@@ -6,7 +6,7 @@
  module Move
     where
 
-import Game
+import Board
     (   Board
     ,   Position
     )

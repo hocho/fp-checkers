@@ -1,7 +1,7 @@
 {-# LANGUAGE MultiWayIf #-}
 {-# LANGUAGE DeriveAnyClass #-}
 
- module Game
+ module Board
     where
 
 import Data.Maybe
@@ -100,13 +100,4 @@ rowDisplay (x : xs) = do
     putStr $ "|" ++ maybe " " show x
     rowDisplay xs
 
--- Jump
--- 	From Location
--- 	Over Location
--- 	To Location
-
--- MultiMove
--- 	Move[]
-
--- MultiJump
--- 	Jump[]	               
+               

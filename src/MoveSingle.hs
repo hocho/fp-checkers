@@ -8,7 +8,7 @@ import Move
     (   Move_(..)
     )
 
-import Game
+import Board
     (   Board
     ,   Player(..)
     ,   Side(..)
