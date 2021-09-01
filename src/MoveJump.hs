@@ -31,9 +31,10 @@ data MoveJump = MoveJump
 
 calcJumpedPosition :: Position -> Position -> Position 
 calcJumpedPosition p1 p2 = 
-    (avg (fst p1) (fst p2), avg (snd p1) (snd p2)) 
+    (avgAtPosition fst p1 p2, avgAtPosition snd p1 p2)
     where 
         avg x y = div (x + y) 2
+        avgAtPosition pos x y = avg (pos x) (pos y)
 
 isValidJump :: Board -> Player -> MoveJump -> Bool
 isValidJump board movePlayer move =

@@ -73,8 +73,7 @@ instance Move_ MoveSingle where
                     |   idx == fst (to move) ->
                             rowUpdate row (snd(to move)) movePiece
                     |   otherwise ->
-                            row
-                )
+                            row)
                 $ zip board [0 .. ] 
 
     moveShow :: MoveSingle -> String 
