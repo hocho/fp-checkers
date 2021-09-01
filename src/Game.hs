@@ -8,7 +8,6 @@ import Board
     ,   color
     ,   otherPlayer
     ,   boardInitial
-    ,   boardDisplay
     ,   player1
     ,   player2
     )
@@ -16,6 +15,10 @@ import Board
 import Move
     (   Move(..)
     ,   Move_(..)
+    )
+
+import Display
+    (   boardDisplay
     )
 
 import MoveSingle
@@ -29,18 +32,18 @@ gamePlay = do
         board = boardInitial()
     do
         boardDisplay board
-        playGame
+        gamePlay'
             board
             player1
 
 movesGet :: Board -> Player -> [Move]
-movesGet board player = 
-    (map Move $ movesJumpGet board player)
-    ++ 
-    (map Move $ movesSingleGet board player)
+movesGet board player =
+    map Move (movesJumpGet board player)
+    ++
+    map Move (movesSingleGet board player)
 
-playGame :: Board -> Player -> IO()
-playGame board player = do
+gamePlay' :: Board -> Player -> IO()
+gamePlay' board player = do
     let
         moves = movesGet board player
         move = uncons moves
@@ -48,11 +51,11 @@ playGame board player = do
         case move of
             Nothing ->
                 return ()
-            Just ((Move nextMove), _) -> do
+            Just (Move nextMove, _) -> do
                 let
                     newBoard = movePlay board nextMove
-                    nextPlayer = 
-                        if moveName nextMove == "MoveSingle" 
+                    nextPlayer =
+                        if moveName nextMove == "MoveSingle"
                             then otherPlayer player
                             else player
                 do
@@ -60,4 +63,4 @@ playGame board player = do
                     putStrLn $ moveShow nextMove
                     putStrLn ""
                     boardDisplay newBoard
-                    playGame newBoard nextPlayer
+                    gamePlay' newBoard nextPlayer

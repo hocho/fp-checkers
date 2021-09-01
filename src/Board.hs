@@ -86,18 +86,5 @@ boardInitial () =
 boardPiece :: Board -> Position -> Maybe Piece
 boardPiece board (row, col) = board !! row !! col
 
-boardDisplay :: Board -> IO()
-boardDisplay [] = do
-    putStrLn ""
-boardDisplay (x : xs) = do
-    rowDisplay x
-    boardDisplay xs
-
-rowDisplay :: BoardRow -> IO()
-rowDisplay [] = do
-    putStrLn "|"
-rowDisplay (x : xs) = do
-    putStr $ "|" ++ maybe " " show x
-    rowDisplay xs
 
                
