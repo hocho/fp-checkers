@@ -55,7 +55,9 @@ test-suite fp-checkers-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      BoardSpec
       MoveJumpSpec
+      MoveSpec
       Paths_fp_checkers
   hs-source-dirs:
       test
