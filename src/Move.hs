@@ -8,7 +8,9 @@
 
 import Board
     (   Board
+    ,   BoardRow
     ,   Position
+    ,   Piece
     )
 
 import Data.Maybe
@@ -20,10 +22,10 @@ class Move_ a where
 
 data Move = forall a. Move_ a => Move a
 
-
--- movesDisplay :: [MoveSingle] -> IO()
--- movesDisplay [] = do
---     putStrLn ""
--- movesDisplay (move : moves) = do
---     print move
---     movesDisplay moves
+-- Updates a row 
+rowUpdate :: BoardRow -> Int -> Maybe Piece -> BoardRow
+rowUpdate boardRow col piece =
+    let
+        (l, r) = splitAt col boardRow
+    in
+        l ++ piece : tail r

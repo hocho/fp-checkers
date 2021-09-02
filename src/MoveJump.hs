@@ -6,6 +6,7 @@
 
 import Move
     (   Move_(..)
+    ,   rowUpdate
     )
 
 import Board
@@ -84,7 +85,7 @@ instance Move_ MoveJump where
             jumpedOverPosition = calcJumpedPosition (fromX move) (toX move) 
         in
             map
-                (\(row, idx) ->
+                (\(idx, row) ->
                     if 
                     |   idx == fst (fromX move) -> 
                             rowUpdate row (snd(fromX move)) Nothing
@@ -95,7 +96,7 @@ instance Move_ MoveJump where
                     |   otherwise ->
                             row
                 )
-                $ zip board [0 .. ] 
+                $ zip [0 ..] board
 
     moveShow :: MoveJump -> String 
     moveShow move = "Jump " ++ show (fromX move) ++ " -> " ++ show(toX move)
@@ -103,12 +104,4 @@ instance Move_ MoveJump where
     moveName :: MoveJump -> String
     moveName move = "MoveJump"
 
-
--- Updates a row 
-rowUpdate :: BoardRow -> Int -> Maybe Piece -> BoardRow
-rowUpdate boardRow col piece =
-    let
-        (l, r) = splitAt col boardRow
-    in
-        l ++ piece : tail r
 

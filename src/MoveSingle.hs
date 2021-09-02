@@ -6,6 +6,7 @@
 
 import Move
     (   Move_(..)
+    ,   rowUpdate
     )
 
 import Board
@@ -66,7 +67,7 @@ instance Move_ MoveSingle where
             movePiece = boardPiece board (from move)
         in
             map
-                (\(row, idx) ->
+                (\(idx, row) ->
                     if 
                     |   idx == fst (from move) -> 
                             rowUpdate row (snd(from move)) Nothing
@@ -74,19 +75,11 @@ instance Move_ MoveSingle where
                             rowUpdate row (snd(to move)) movePiece
                     |   otherwise ->
                             row)
-                $ zip board [0 .. ] 
+                $ zip [0 ..] board
 
     moveShow :: MoveSingle -> String 
     moveShow move = "Move " ++ show (from move) ++ " -> " ++ show(to move)
 
     moveName :: MoveSingle -> String
     moveName move = "MoveSingle"
-
--- Updates a row 
-rowUpdate :: BoardRow -> Int -> Maybe Piece -> BoardRow
-rowUpdate boardRow col piece =
-    let
-        (l, r) = splitAt col boardRow
-    in
-        l ++ piece : tail r
 
