@@ -22,6 +22,10 @@ class Move_ a where
 
 data Move = forall a. Move_ a => Move a
 
+instance Show Move where 
+    show :: Move -> String 
+    show (Move move) =  moveShow move
+
 -- Updates a row 
 rowUpdate :: BoardRow -> Int -> Maybe Piece -> BoardRow
 rowUpdate boardRow col piece =

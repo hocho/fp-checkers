@@ -25,6 +25,7 @@ source-repository head
 
 library
   exposed-modules:
+      Analytics
       Board
       Display
       Game
@@ -55,6 +56,7 @@ test-suite fp-checkers-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      AnalyticsSpec
       BoardSpec
       MoveJumpSpec
       MoveSpec

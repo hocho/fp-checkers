@@ -2,7 +2,7 @@
 
 ## Running Tests
 
-- Run all the tests  
+- Run all the tests and exit 
   **stack test**
 
 - Run single tests  
@@ -11,3 +11,6 @@
     - MoveSpec.main
     - JumpMoveSpec.main
   
+  - In ghci need to load
+  - :set -package hspec
+  - :set -package QuickCheck
