@@ -28,28 +28,50 @@ data Analytics = Analytics
 
 analyticsGenerate :: Board -> Player -> [(Move, Analytics)]
 analyticsGenerate board player =
-    -- get all move single
-    -- for each compute post move captures
-    []
+    analyticsGenerateMoveJump board player ++ 
+    analyticsGenerateMoveSingle board player
 
 analyticsGenerateMoveSingle :: Board -> Player -> [(Move, Analytics)]
 analyticsGenerateMoveSingle board player =
     let 
         preMoveCaptures = length $ movesJumpGet board (otherPlayer player)
-        moves = movesSingleGet board player
+        moves = map Move $ movesSingleGet board player
     in
         map 
             (\move -> 
-                (Move move, 
+                (move, 
                 Analytics {
                     preMoveCaptures = preMoveCaptures, 
-                    postMoveCaptures = postMoveSingleCaptures board player move, 
+                    postMoveCaptures = computePostMoveCaptures board player move, 
                     captures = 0 }) )
             moves
 
-postMoveSingleCaptures :: Board -> Player -> MoveSingle -> Int
-postMoveSingleCaptures board player move =
+-- postMoveSingleCaptures :: Board -> Player -> MoveSingle -> Int
+-- postMoveSingleCaptures board player move =
+--     let
+--         newBoard = movePlay board move 
+--     in
+--         length $ movesJumpGet newBoard (otherPlayer player)
+
+computePostMoveCaptures :: Board -> Player -> Move -> Int
+computePostMoveCaptures board player (Move move) =
     let
-        newBoard = movePlay board move 
+        newBoard = movePlay board move
     in
         length $ movesJumpGet newBoard (otherPlayer player)
+
+-- to fix
+analyticsGenerateMoveJump :: Board -> Player -> [(Move, Analytics)]
+analyticsGenerateMoveJump board player =
+    let 
+        preMoveCaptures = length $ movesJumpGet board (otherPlayer player)
+        moves = map Move $ movesJumpGet board player
+    in
+        map 
+            (\move -> 
+                (move, 
+                Analytics {
+                    preMoveCaptures = preMoveCaptures, 
+                    postMoveCaptures = computePostMoveCaptures board player move, 
+                    captures = 0 }) )
+            moves

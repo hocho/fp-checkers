@@ -22,7 +22,13 @@ import Display
     )
 
 import MoveSingle
+
 import MoveJump
+
+import Strategy
+import StrategyFirst
+
+import Analytics
 
 import Data.List
 
@@ -36,22 +42,17 @@ gamePlay = do
             board
             player1
 
-movesGet :: Board -> Player -> [Move]
-movesGet board player =
-    map Move (movesJumpGet board player)
-    ++
-    map Move (movesSingleGet board player)
-
 gamePlay' :: Board -> Player -> IO()
 gamePlay' board player = do
     let
-        moves = movesGet board player
-        move = uncons moves
+        strategy = StrategyFirst 0 0
+        moveAnalytics = analyticsGenerate board player
+        move = getMove strategy moveAnalytics
     do
         case move of
             Nothing ->
                 return ()
-            Just (Move nextMove, _) -> do
+            Just (Move nextMove) -> do
                 let
                     newBoard = movePlay board nextMove
                     nextPlayer =

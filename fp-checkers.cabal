@@ -32,10 +32,13 @@ library
       Move
       MoveJump
       MoveSingle
+      Strategy
+      StrategyFirst
   other-modules:
       Paths_fp_checkers
   hs-source-dirs:
       src
+      src/strategy
   build-depends:
       array
     , base >=4.7 && <5
