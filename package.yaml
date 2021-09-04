@@ -24,6 +24,8 @@ dependencies:
 
 library:
   source-dirs: src
+  dependencies:
+  - array
 
 executables:
   fp-checkers-exe:
@@ -35,6 +37,7 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - fp-checkers
+    - array
 
 tests:
   fp-checkers-test:
@@ -48,3 +51,4 @@ tests:
     - fp-checkers
     - hspec
     - QuickCheck
+    - array

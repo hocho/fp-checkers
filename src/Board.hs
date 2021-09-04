@@ -4,7 +4,9 @@
  module Board
     where
 
+import Data.Array.IArray
 import Data.Maybe
+import Data.List
 
 boardSize = 8
 
@@ -74,24 +76,41 @@ boardInitial () =
 -- Initialize board with 2 pieces
 boardInitialize :: Piece -> Piece -> Board
 boardInitialize p1 p2 =
-    [   buildRow [Nothing, piece1]
-    ,   buildRow [piece1, Nothing]
-    ,   buildRow [Nothing, piece1]
-    ,   buildRow [Nothing]
-    ,   buildRow [Nothing]
-    ,   buildRow [piece2, Nothing]
-    ,   buildRow [Nothing, piece2]
-    ,   buildRow [piece2, Nothing]
+    let
+        br = buildRowFromStringDefault
+    in
+    [   br "| |0| |0| |0| |0|"
+    ,   br "|0| |0| |0| |0| |"
+    ,   br "| |0| |0| |0| |0|"
+    ,   br "| | | | | | | | |"
+    ,   br "| | | | | | | | |"
+    ,   br "|1| |1| |1| |1| |"
+    ,   br "| |1| |1| |1| |1|"
+    ,   br "|1| |1| |1| |1| |"
     ]
-    where 
-        piece1 = Just p1
-        piece2 = Just p2
-
-buildRow :: [Maybe Piece] -> [Maybe Piece]
-buildRow segment = take boardSize $ concat $ repeat segment
 
 boardPiece :: Board -> Position -> Maybe Piece
 boardPiece board (row, col) = board !! row !! col
 
+-- Row string is of the form "| |1| |0| | | |"
+-- where 0 and 1 are indexes into the Piece Array passed
+buildRowFromString :: String -> Array Int Piece -> [Maybe Piece]
+buildRowFromString str pieces =
+  unfoldr 
+    (\s -> if null s then Nothing else Just (toPiece (head s), tail s))
+    str'
+  where
+    str' = filter (/='|') str 
+    toPiece ch =
+      case ch of
+        '0' -> Just $ pieces!0
+        '1' -> Just $ pieces!1
+        ' ' -> Nothing
+        _   -> error "Unexpected Character"               
 
-               
+buildRowFromStringDefault :: String -> [Maybe Piece]
+buildRowFromStringDefault str =
+    buildRowFromString str pieces
+    where 
+        pieces = array(0,1) [(0, fromJust pawn1), (1, fromJust pawn2)]
+  

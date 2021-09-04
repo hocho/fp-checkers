@@ -11,13 +11,10 @@ main = hspec spec
 
 spec :: Spec
 spec = do
-  describe "Prelude.head" $ do
-    it "returns the first element of a list" $ do
-      head [23 ..] `shouldBe` (23 :: Int)
+  describe "Calculate jumped position" $ do
 
-    it "returns the first element of an *arbitrary* list" $
-      property $ \x xs -> head (x:xs) == (x :: Int)
-
-    it "throws an exception if used with an empty list" $ do
-      evaluate (head []) `shouldThrow` anyException
+    it "returns the correct postion jumped" $ do
+      
+      calcJumpedPosition (3,  7) (5, 5)
+        `shouldBe` (4, 6)
 

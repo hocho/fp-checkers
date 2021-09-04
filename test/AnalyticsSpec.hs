@@ -13,6 +13,7 @@ import Board
     ,   boardInitial
     ,   player1
     ,   player2
+    ,   buildRowFromStringDefault
     )
 import Data.List
 
@@ -40,11 +41,12 @@ spec = do
       it "All moves result in 1 per and 1 post move capture" $ do
 
         let
+            br = buildRowFromStringDefault
             board =    
               [   br "| | | | | | | | |"
               ,   br "| | | | | | | | |"
-              ,   br "| |B| | | |B| | |"
-              ,   br "| | |W| |W| | | |"
+              ,   br "| |0| | | |0| | |"
+              ,   br "| | |1| |1| | | |"
               ,   br "| | | | | | | | |"
               ,   br "| | | | | | | | |"
               ,   br "| | | | | | | | |"
@@ -54,17 +56,3 @@ spec = do
             count = length result
 
         result `shouldBe` replicate count (Analytics 2 1 0)
-
--- Creates a board row from a string
-br :: String -> [Maybe Piece]
-br str =
-  unfoldr 
-    (\s@(c : cs) -> if null s then Nothing else Just (toPiece c, cs))
-    str'
-  where
-    str' = filter (/='|') str 
-    toPiece ch =
-      case ch of
-        'B' -> pawn1
-        'W' -> pawn2
-        _   -> Nothing

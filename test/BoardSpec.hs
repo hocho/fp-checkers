@@ -5,30 +5,48 @@ import Test.QuickCheck
 import Control.Exception (evaluate)
 
 import Board
+import Data.Array
+import Data.Maybe
 
 main :: IO ()
 main = hspec spec
 
 specIsValidPosition :: Position -> SpecWith ()
-specIsValidPosition pos = 
+specIsValidPosition pos =
   describe "Valid Position" $ do
     it "returns true if position is valid" $ do
       isValidPosition pos `shouldBe` True
 
 specIsInvalidPosition :: Position -> SpecWith ()
-specIsInvalidPosition pos = 
+specIsInvalidPosition pos =
   describe "Invalid Position" $ do
     it "returns false if position is invalid" $ do
       isValidPosition pos `shouldBe` False
 
 spec :: Spec
 spec = do
+  -- valid positions
   specIsValidPosition (0, 1)
   specIsValidPosition (1, 0)
   specIsValidPosition (7, 4)
   specIsValidPosition (2, 5)
 
+  -- invalid positions
   specIsInvalidPosition (0, 0)
   specIsInvalidPosition (8, 0)
   specIsInvalidPosition (0, 8)
   specIsInvalidPosition (2, -1)
+
+  describe "Build board row from a string" $ do
+
+    describe "Valid string" $ do
+      it "returns valid row" $ do
+        let
+          row = buildRowFromStringDefault "| |1| |0|"
+
+        row `shouldBe` [Nothing, pawn2, Nothing, pawn1]
+
+    describe "Invalid string" $ do
+      it "raises exception" $ do
+        evaluate(buildRowFromStringDefault "| |1| |0|2|" !! 4)
+          `shouldThrow` anyException
