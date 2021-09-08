@@ -5,6 +5,7 @@ module StrategyFirst
 
 import Strategy
     (   Strategy_(..)
+    ,   Strategy(..)
     )
 import Move
 import Analytics
@@ -15,9 +16,9 @@ data StrategyFirst = StrategyFirst
     }
 
 instance Strategy_ StrategyFirst where 
-    getMove :: StrategyFirst -> [(Move, Analytics)] -> Maybe Move
-    getMove strategy [] = Nothing
-    getMove strategy ((move, _) : _) = Just move
+    getMove :: StrategyFirst -> [(Move, Analytics)] -> (Maybe Move, Strategy)
+    getMove strategy [] = (Nothing, Strategy strategy)
+    getMove strategy ((move, _) : _) = (Just move, Strategy strategy)
 
     
     

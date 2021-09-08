@@ -28,6 +28,7 @@ library:
   - src/strategy
   dependencies:
   - array
+  - random
 
 executables:
   fp-checkers-exe:

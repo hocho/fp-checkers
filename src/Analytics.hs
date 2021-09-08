@@ -34,7 +34,8 @@ analyticsGenerate board player =
 analyticsGenerateMoveSingle :: Board -> Player -> [(Move, Analytics)]
 analyticsGenerateMoveSingle board player =
     let 
-        preMoveCaptures = length $ movesJumpGet board (otherPlayer player)
+        opponent = otherPlayer player
+        preMoveCaptures = length $ movesJumpGet board opponent
         moves = map Move $ movesSingleGet board player
     in
         map 
@@ -42,29 +43,15 @@ analyticsGenerateMoveSingle board player =
                 (move, 
                 Analytics {
                     preMoveCaptures = preMoveCaptures, 
-                    postMoveCaptures = computePostMoveCaptures board player move, 
+                    postMoveCaptures = computePostMoveCaptures board opponent move, 
                     captures = 0 }) )
             moves
 
--- postMoveSingleCaptures :: Board -> Player -> MoveSingle -> Int
--- postMoveSingleCaptures board player move =
---     let
---         newBoard = movePlay board move 
---     in
---         length $ movesJumpGet newBoard (otherPlayer player)
-
-computePostMoveCaptures :: Board -> Player -> Move -> Int
-computePostMoveCaptures board player (Move move) =
-    let
-        newBoard = movePlay board move
-    in
-        length $ movesJumpGet newBoard (otherPlayer player)
-
--- to fix
 analyticsGenerateMoveJump :: Board -> Player -> [(Move, Analytics)]
 analyticsGenerateMoveJump board player =
     let 
-        preMoveCaptures = length $ movesJumpGet board (otherPlayer player)
+        opponent = otherPlayer player
+        preMoveCaptures = length $ movesJumpGet board opponent
         moves = map Move $ movesJumpGet board player
     in
         map 
@@ -72,6 +59,15 @@ analyticsGenerateMoveJump board player =
                 (move, 
                 Analytics {
                     preMoveCaptures = preMoveCaptures, 
-                    postMoveCaptures = computePostMoveCaptures board player move, 
-                    captures = 0 }) )
+                    postMoveCaptures = computePostMoveCaptures board opponent move, 
+                    captures = 1 }) )
             moves
+
+-- returns the number of captures, possible after a move has been performed 
+computePostMoveCaptures :: Board -> Player -> Move -> Int
+computePostMoveCaptures board player (Move move) =
+    let
+        newBoard = movePlay board move
+    in
+        length $ movesJumpGet newBoard (otherPlayer player)
+

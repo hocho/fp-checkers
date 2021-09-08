@@ -2,10 +2,6 @@
  module Strategy
     where
 
-import Board
-    (   Board
-    ,   Player
-    )
 import Move
     (   Move
     )
@@ -14,7 +10,7 @@ import Analytics
     )
 
 class Strategy_ a where
-    getMove :: a -> [(Move, Analytics)] -> Maybe Move
+    getMove :: a -> [(Move, Analytics)] -> (Maybe Move, Strategy)
 
 data Strategy = forall a. Strategy_ a => Strategy a
 

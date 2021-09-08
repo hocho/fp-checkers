@@ -34,6 +34,7 @@ library
       MoveSingle
       Strategy
       StrategyFirst
+      StrategyRandom
   other-modules:
       Paths_fp_checkers
   hs-source-dirs:
@@ -42,6 +43,7 @@ library
   build-depends:
       array
     , base >=4.7 && <5
+    , random
   default-language: Haskell2010
 
 executable fp-checkers-exe
