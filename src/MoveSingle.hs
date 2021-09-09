@@ -20,7 +20,7 @@ import Board
     ,   isValidPosition
     ,   boardPiece
     )
-    
+
 import Data.Maybe
 
 data MoveSingle = MoveSingle
@@ -55,29 +55,29 @@ movesSingleGet board player =
         createMove (row, col) deltaCol =
             MoveSingle { from = (row, col), to = (row + delta, col + deltaCol) }
         createMoves position =
-            [   createMove position (-1) 
-            ,   createMove position 1 
+            [   createMove position (-1)
+            ,   createMove position 1
             ]
         moves = concat $ [createMoves (row, col) | row <- [0 .. boardSize], col <- [0 .. boardSize]]
 
-instance Move_ MoveSingle where 
-    movePlay :: Board -> MoveSingle -> Board  
+instance Move_ MoveSingle where
+    movePlay :: Board -> MoveSingle -> Board
     movePlay board move =
-        let
+        let 
             movePiece = boardPiece board (from move)
-        in
-            map
-                (\(idx, row) ->
+        in           
+            zipWith 
+                (\ idx row -> 
                     if 
-                    |   idx == fst (from move) -> 
-                            rowUpdate row (snd(from move)) Nothing
-                    |   idx == fst (to move) ->
-                            rowUpdate row (snd(to move)) movePiece
-                    |   otherwise ->
-                            row)
-                $ zip [0 ..] board
+                    | idx == fst (from move) -> 
+                        rowUpdate row (snd (from move)) Nothing
+                    | idx == fst (to move) -> 
+                        rowUpdate row (snd (to move)) movePiece
+                    | otherwise -> 
+                        row)
+            [0 ..] board
 
-    moveShow :: MoveSingle -> String 
+    moveShow :: MoveSingle -> String
     moveShow move = "Move " ++ show (from move) ++ " -> " ++ show(to move)
 
     moveName :: MoveSingle -> String

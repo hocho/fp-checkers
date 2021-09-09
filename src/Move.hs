@@ -1,5 +1,3 @@
-{-# LANGUAGE DeriveAnyClass #-}
-{-# OPTIONS_GHC -Wno-missing-methods #-}
 {-# LANGUAGE InstanceSigs #-}
 {-# LANGUAGE ExistentialQuantification #-}
 

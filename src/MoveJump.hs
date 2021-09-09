@@ -84,8 +84,8 @@ instance Move_ MoveJump where
             movePiece = boardPiece board (fromX move)
             jumpedOverPosition = calcJumpedPosition (fromX move) (toX move) 
         in
-            map
-                (\(idx, row) ->
+            zipWith
+                (\ idx row ->
                     if 
                     |   idx == fst (fromX move) -> 
                             rowUpdate row (snd(fromX move)) Nothing
@@ -96,7 +96,7 @@ instance Move_ MoveJump where
                     |   otherwise ->
                             row
                 )
-                $ zip [0 ..] board
+                [0 ..] board
 
     moveShow :: MoveJump -> String 
     moveShow move = "Jump " ++ show (fromX move) ++ " -> " ++ show(toX move)

@@ -12,6 +12,7 @@ import Move
 import Analytics
 import Foreign (Int)
 import Data.List
+import Data.Bifunctor
 
 newtype StrategyAnalytics = StrategyAnalytics
     {   stdGen :: StdGen
@@ -26,13 +27,13 @@ instance Strategy_ StrategyAnalytics where
         (Nothing, Strategy strategy)
     getMove strategy moveAnalytics =
         let
-            moveScoresSorted = 
-                sortOn 
+            moveScoresSorted =
+                sortOn
                     (((-1) * ) . snd)
-                    $ map 
-                        (\(move, analytics) -> (move, computeScore analytics)) 
+                    $ map
+                        (second computeScore)
                         moveAnalytics
-            
+
             bestScore = snd $ head moveScoresSorted
             bestScores = takeWhile ((bestScore ==) . snd) moveScoresSorted
             lastIdx = length bestScores - 1
