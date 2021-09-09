@@ -29,18 +29,19 @@ library
       Board
       Display
       Game
-      Move
-      MoveJump
-      MoveSingle
       Strategy
       StrategyAnalytics
       StrategyFirst
       StrategyRandom
+      Move
+      MoveJump
+      MoveSingle
   other-modules:
       Paths_fp_checkers
   hs-source-dirs:
       src
       src/strategy
+      src/move
   build-depends:
       array
     , base >=4.7 && <5
