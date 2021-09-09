@@ -69,5 +69,5 @@ computePostMoveCaptures board player (Move move) =
     let
         newBoard = movePlay board move
     in
-        length $ movesJumpGet newBoard (otherPlayer player)
+        length $ movesJumpGet newBoard player
 

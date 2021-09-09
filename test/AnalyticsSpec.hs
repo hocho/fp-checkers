@@ -56,3 +56,89 @@ spec = do
             count = length result
 
         result `shouldBe` replicate count (Analytics 2 1 0)
+
+  describe "Analytics for Move Jump" $ do
+
+    describe "Board with a single jump by both players" $ do
+
+      it "It returns analytics with 1 pre, no posts and 1 capture" $ do
+
+        let
+            br = buildRowFromStringDefault
+            board =    
+              [   br "| | | | | | | | |"
+              ,   br "| | | | | | | | |"
+              ,   br "| |0| | | | | | |"
+              ,   br "| | |1| | | | | |"
+              ,   br "| | | | | | | | |"
+              ,   br "| | | | | | | | |"
+              ,   br "| | | | | | | | |"
+              ,   br "| | | | | | | | |"
+              ] 
+            result = map snd $ analyticsGenerateMoveJump board player2
+            count = length result
+
+        result `shouldBe` replicate count (Analytics 1 0 1)
+
+    describe "Board with a single jump by current player" $ do
+
+      it "It returns analytics with no pre, no posts and 1 capture" $ do
+
+        let
+            br = buildRowFromStringDefault
+            board =    
+              [   br "| | | | | | | | |"
+              ,   br "| | | | | | | | |"
+              ,   br "| |0| | | | | | |"
+              ,   br "|1| | | | | | | |"
+              ,   br "| | | | | | | | |"
+              ,   br "| | | | | | | | |"
+              ,   br "| | | | | | | | |"
+              ,   br "| | | | | | | | |"
+              ] 
+            result = map snd $ analyticsGenerateMoveJump board player2
+            count = length result
+
+        result `shouldBe` replicate count (Analytics 0 0 1)
+
+    describe "Board with a single jump by current player" $ do
+
+      it "It returns analytics with no pre, 1 posts and 1 capture" $ do
+
+        let
+            br = buildRowFromStringDefault
+            board =    
+              [   br "| | | |0| | | | |"
+              ,   br "| | | | | | | | |"
+              ,   br "| | | |0| | | | |"
+              ,   br "| | | | |1| | | |"
+              ,   br "| | | | | |1| | |"
+              ,   br "| | | | | | | | |"
+              ,   br "| | | | | | | | |"
+              ,   br "| | | | | | | | |"
+              ] 
+            result = map snd $ analyticsGenerateMoveJump board player2
+            count = length result
+
+        result `shouldBe` replicate count (Analytics 0 1 1)
+
+    describe "Board with a single jump by current player" $ do
+
+      it "It returns analytics with 1 pre, 1 posts and 1 capture" $ do
+
+        let
+            br = buildRowFromStringDefault
+            board =    
+              [   br "| | | |0| | | | |"
+              ,   br "| | | | | | | | |"
+              ,   br "| | | |0| | | | |"
+              ,   br "| | | | |1| | | |"
+              ,   br "| | | | | | | | |"
+              ,   br "| | | | | | | | |"
+              ,   br "| | | | | | | | |"
+              ,   br "| | | | | | | | |"
+              ] 
+            result = map snd $ analyticsGenerateMoveJump board player2
+            count = length result
+
+        result `shouldBe` replicate count (Analytics 1 1 1)

@@ -24,6 +24,7 @@ import Display
 import Strategy
 import StrategyFirst
 import StrategyRandom
+import StrategyAnalytics
 
 import Analytics
 
@@ -43,7 +44,7 @@ gamePlay = do
         board = boardInitial()
         -- strategy0 = Strategy $ StrategyFirst 0 0
         strategy0 = Strategy $ mkStrategyRandom seed0
-        strategy1 = Strategy $ mkStrategyRandom seed1
+        strategy1 = Strategy $ mkStrategyAnalytics seed1
         players = buildArray [player1 , player2]
         strategies = buildArray [strategy0, strategy1]
     do
@@ -52,13 +53,14 @@ gamePlay = do
             board
             players
             strategies
+            1
             0
 
 otherPlay :: Int -> Int
 otherPlay play = (play + 1)  `mod` 2
 
-gamePlay' :: Board -> Array Int Player -> Array Int Strategy -> Int -> IO()
-gamePlay' board players strategies play = do
+gamePlay' :: Board -> Array Int Player -> Array Int Strategy -> Int -> Int -> IO()
+gamePlay' board players strategies num play = do
     let
         moveAnalytics = analyticsGenerate board (players!play)
         (move, newStrategy) = 
@@ -77,8 +79,9 @@ gamePlay' board players strategies play = do
                             else play
                     newStrategies = strategies//[(play, newStrategy)]
                 do
+                    putStr $ show num ++ ". "
                     putStr $ show (color (players!play)) ++ " "
                     putStrLn $ moveShow nextMove
                     putStrLn ""
                     boardDisplay newBoard
-                    gamePlay' newBoard players newStrategies newPlay
+                    gamePlay' newBoard players newStrategies (num + 1) newPlay

@@ -33,6 +33,7 @@ library
       MoveJump
       MoveSingle
       Strategy
+      StrategyAnalytics
       StrategyFirst
       StrategyRandom
   other-modules:
