@@ -4,9 +4,19 @@
  module Board
     where
 
-import Data.Array.IArray
-import Data.Maybe
-import Data.List
+import Data.Array.IArray 
+    (   (!)
+    ,    array
+    ,   Array 
+    )
+
+import Data.Maybe 
+    (   fromJust 
+    )
+
+import Data.List 
+    (    unfoldr 
+    )
 
 boardSize = 8
 

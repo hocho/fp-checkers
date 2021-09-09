@@ -8,11 +8,21 @@ import System.Random
 import Strategy
     (   Strategy_(..), Strategy (Strategy)
     )
-import Move
+import Move 
+    (   Move 
+    )
+
 import Analytics
-import Foreign (Int)
-import Data.List
-import Data.Bifunctor
+    (   Analytics(preMoveCaptures, postMoveCaptures, captures) 
+    )
+
+import Data.List 
+    (   sortOn 
+    )
+
+import Data.Bifunctor 
+    (   Bifunctor(second) 
+    )
 
 newtype StrategyAnalytics = StrategyAnalytics
     {   stdGen :: StdGen

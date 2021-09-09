@@ -8,8 +8,14 @@ import System.Random
 import Strategy
     (   Strategy_(..), Strategy (Strategy)
     )
-import Move
-import Analytics
+
+import Move 
+    (   Move 
+    )
+
+import Analytics 
+    (   Analytics 
+    )
 
 newtype StrategyRandom = StrategyRandom
     {   stdGen :: StdGen

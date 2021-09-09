@@ -11,12 +11,17 @@ import Board
 
 import Move
     (   Move_
-    ,    Move(..)
+    ,   Move(..)
     ,   movePlay
     )
 
-import MoveSingle
-import MoveJump
+import MoveSingle 
+    ( movesSingleGet 
+    )
+
+import MoveJump 
+    ( movesJumpGet 
+    )
 
 data Analytics = Analytics
     {   preMoveCaptures     ::  Int 
@@ -63,7 +68,7 @@ analyticsGenerateMoveJump board player =
                     captures = 1 }) )
             moves
 
--- returns the number of captures, possible after a move has been performed 
+-- returns the number of captures possible, after a move has been performed 
 computePostMoveCaptures :: Board -> Player -> Move -> Int
 computePostMoveCaptures board player (Move move) =
     let

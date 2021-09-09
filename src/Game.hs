@@ -22,15 +22,36 @@ import Display
     )
 
 import Strategy
-import StrategyFirst
-import StrategyRandom
-import StrategyAnalytics
+     (  Strategy(..)
+     ,  Strategy_(getMove) 
+     )
 
-import Analytics
+import StrategyFirst ()
 
-import Data.List
-import Data.Array.IArray
-import System.Random
+import StrategyRandom 
+    (   mkStrategyRandom 
+    )
+
+import StrategyAnalytics 
+    (   mkStrategyAnalytics 
+    )
+
+import Analytics 
+    (   analyticsGenerate 
+    )
+
+import Data.List ()
+
+import Data.Array.IArray 
+    (   (!)
+    ,   (//)
+    ,   array
+    ,   Array 
+    )
+
+import System.Random 
+    (   randomIO 
+    )
 
 buildArray :: [a] -> Array Int a
 buildArray items =

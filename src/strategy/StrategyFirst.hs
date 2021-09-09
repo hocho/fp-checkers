@@ -7,8 +7,13 @@ import Strategy
     (   Strategy_(..)
     ,   Strategy(..)
     )
-import Move
-import Analytics
+import Move 
+    (   Move 
+    )
+
+import Analytics 
+    (   Analytics 
+    )
 
 data StrategyFirst = StrategyFirst
     {   dummy :: Int
