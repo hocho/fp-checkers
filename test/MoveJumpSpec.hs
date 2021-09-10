@@ -13,8 +13,22 @@ spec :: Spec
 spec = do
   describe "Calculate jumped position" $ do
 
-    it "returns the correct postion jumped" $ do
+    it "returns the correct position jumped" $ do
       
-      calcJumpedPosition (3,  7) (5, 5)
-        `shouldBe` (4, 6)
+      calcJumpedPosition (0,  1) (3, 4)
+        `shouldBe` (2, 3)
 
+    it "returns the correct position jumped" $ do
+      
+      calcJumpedPosition (4, 5) (1, 2)
+        `shouldBe` (2, 3)
+
+    it "returns the correct position jumped" $ do
+      
+      calcJumpedPosition (2, 5) (6, 1)
+        `shouldBe` (5, 2)
+
+    it "returns the correct position jumped" $ do
+      
+      calcJumpedPosition (2, 1) (6, 5)
+        `shouldBe` (5, 4)
