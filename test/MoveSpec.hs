@@ -6,7 +6,7 @@ import Control.Exception (evaluate)
 
 import Move
 import Board
-    (   pawn1
+    (   pawn0
     )
 
 main :: IO ()
@@ -18,8 +18,8 @@ spec = do
       
     it "updates a board row correctly" $ do
 
-        boardRowUpdated `shouldBe` [Nothing, pawn1, Nothing]
+        boardRowUpdated `shouldBe` [Nothing, pawn0, Nothing]
         
         where 
             boardRow = [Nothing, Nothing, Nothing]
-            boardRowUpdated = rowUpdate boardRow 1 pawn1
+            boardRowUpdated = rowUpdate boardRow 1 pawn0

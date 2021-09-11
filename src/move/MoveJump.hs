@@ -23,6 +23,7 @@ import Board
     )
     
 import Data.Maybe
+import Data.Bifunctor 
 
 data MoveJump = MoveJump
     {   fromX :: Position
@@ -33,10 +34,10 @@ data MoveJump = MoveJump
 calcJumpedPosition :: Position -> Position -> Position 
 calcJumpedPosition p1 p2 = 
     let 
-        deltaRow = if fst p1 < fst p2 then -1 else 1
-        deltaCol = if snd p1 < snd p2 then -1 else 1
+        delta f = if f p1 < f p2 then -1 else 1
     in
-        (fst p2 + deltaRow, snd p2 + deltaCol)
+        bimap (+ delta fst) (+ delta snd) p2
+
 
 isValidJump :: Board -> Player -> MoveJump -> Bool
 isValidJump board movePlayer move =
@@ -52,10 +53,10 @@ isValidJump board movePlayer move =
             jumpOverPiece = boardPiece board jumpedOverPosition
             isJumpOverPieceOfOpponent =
                 case jumpOverPiece of
-                Just p
-                    ->  player p == otherPlayer movePlayer
-                Nothing
-                    ->  False
+                    Just p
+                        ->  player p == otherPlayer movePlayer
+                    Nothing
+                        ->  False
         in
                 isValidPosition (fromX move)
             &&  isValidPosition (toX move)

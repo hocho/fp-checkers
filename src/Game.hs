@@ -8,8 +8,8 @@ import Board
     ,   color
     ,   otherPlayer
     ,   boardInitial
+    ,   player0
     ,   player1
-    ,   player2
     )
 
 import Move
@@ -66,7 +66,7 @@ gamePlay = do
         -- strategy0 = Strategy $ StrategyFirst 0 0
         strategy0 = Strategy $ mkStrategyRandom seed0
         strategy1 = Strategy $ mkStrategyAnalytics seed1
-        players = buildArray [player1 , player2]
+        players = buildArray [player0 , player1]
         strategies = buildArray [strategy0, strategy1]
     do
         boardDisplay board

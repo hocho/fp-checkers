@@ -35,6 +35,7 @@ library
       StrategyRandom
       Move
       MoveJump
+      MoveSimple
       MoveSingle
   other-modules:
       Paths_fp_checkers

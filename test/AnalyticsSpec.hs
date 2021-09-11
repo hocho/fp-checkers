@@ -8,11 +8,11 @@ import Analytics
 import Move
 import Board
     (   Piece
+    ,   pawn0
     ,   pawn1
-    ,   pawn2
     ,   boardInitial
+    ,   player0
     ,   player1
-    ,   player2
     ,   buildRowFromStringDefault
     )
 import Data.List
@@ -31,7 +31,7 @@ spec = do
 
           let
               board = boardInitial ()
-              result = map snd $ analyticsGenerateMoveSingle board player1
+              result = map snd $ analyticsGenerateMoveSingle board player0
               count = length result
           
           result `shouldBe` replicate count (Analytics 0 0 0)
@@ -52,7 +52,7 @@ spec = do
               ,   br "| | | | | | | | |"
               ,   br "| | | | | | | | |"
               ] 
-            result = map snd $ analyticsGenerateMoveSingle board player2
+            result = map snd $ analyticsGenerateMoveSingle board player1
             count = length result
 
         result `shouldBe` replicate count (Analytics 2 1 0)
@@ -75,7 +75,7 @@ spec = do
               ,   br "| | | | | | | | |"
               ,   br "| | | | | | | | |"
               ] 
-            result = map snd $ analyticsGenerateMoveJump board player2
+            result = map snd $ analyticsGenerateMoveJump board player1
             count = length result
 
         result `shouldBe` replicate count (Analytics 1 0 1)
@@ -96,7 +96,7 @@ spec = do
               ,   br "| | | | | | | | |"
               ,   br "| | | | | | | | |"
               ] 
-            result = map snd $ analyticsGenerateMoveJump board player2
+            result = map snd $ analyticsGenerateMoveJump board player1
             count = length result
 
         result `shouldBe` replicate count (Analytics 0 0 1)
@@ -117,7 +117,7 @@ spec = do
               ,   br "| | | | | | | | |"
               ,   br "| | | | | | | | |"
               ] 
-            result = map snd $ analyticsGenerateMoveJump board player2
+            result = map snd $ analyticsGenerateMoveJump board player1
             count = length result
 
         result `shouldBe` replicate count (Analytics 0 1 1)
@@ -138,7 +138,7 @@ spec = do
               ,   br "| | | | | | | | |"
               ,   br "| | | | | | | | |"
               ] 
-            result = map snd $ analyticsGenerateMoveJump board player2
+            result = map snd $ analyticsGenerateMoveJump board player1
             count = length result
 
         result `shouldBe` replicate count (Analytics 1 1 1)

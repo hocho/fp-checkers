@@ -1,7 +1,7 @@
 {-# LANGUAGE MultiWayIf #-}
 {-# LANGUAGE InstanceSigs #-}
 
- module MoveSingle
+ module MoveSimple
     where
 
 import Move
@@ -18,18 +18,18 @@ import Board
     ,   Position
     ,   boardSize
     ,   isValidPosition
-    ,   boardPiece, PieceType (Pawn)
+    ,   boardPiece
     )
 
 import Data.Maybe
 
-data MoveSingle = MoveSingle
+data MoveSimple = MoveSimple
     {   from :: Position
     ,   to :: Position
     }
     deriving (Show)
 
-isValidMove :: Board -> Player -> MoveSingle -> Bool
+isValidMove :: Board -> Player -> MoveSimple -> Bool
 isValidMove board movePlayer move =
         let
             fromPiece = boardPiece board (from move)
@@ -37,7 +37,6 @@ isValidMove board movePlayer move =
                 case fromPiece of
                 Just p
                     ->  player p == movePlayer
-                        && pieceType p == Pawn
                 Nothing
                     ->  False
         in
@@ -46,7 +45,7 @@ isValidMove board movePlayer move =
             &&  isFromPieceOfPlayer
             &&  isNothing(boardPiece board (to move))
 
-movesSingleGet :: Board -> Player -> [MoveSingle]
+movesSingleGet :: Board -> Player -> [MoveSimple]
 movesSingleGet board player =
     filter (isValidMove board player) moves
     where
@@ -54,15 +53,15 @@ movesSingleGet board player =
             North -> 1
             South -> -1
         createMove (row, col) deltaCol =
-            MoveSingle { from = (row, col), to = (row + delta, col + deltaCol) }
+            MoveSimple { from = (row, col), to = (row + delta, col + deltaCol) }
         createMoves position =
             [   createMove position (-1)
             ,   createMove position 1
             ]
         moves = concat $ [createMoves (row, col) | row <- [0 .. boardSize], col <- [0 .. boardSize]]
 
-instance Move_ MoveSingle where
-    movePlay :: Board -> MoveSingle -> Board
+instance Move_ MoveSimple where
+    movePlay :: Board -> MoveSimple -> Board
     movePlay board move =
         let 
             movePiece = boardPiece board (from move)
@@ -78,9 +77,9 @@ instance Move_ MoveSingle where
                         row)
             [0 ..] board
 
-    moveShow :: MoveSingle -> String
+    moveShow :: MoveSimple -> String
     moveShow move = "Move " ++ show (from move) ++ " -> " ++ show(to move)
 
-    moveName :: MoveSingle -> String
+    moveName :: MoveSimple -> String
     moveName move = "MoveSingle"
 

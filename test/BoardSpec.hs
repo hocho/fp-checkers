@@ -44,9 +44,42 @@ spec = do
         let
           row = buildRowFromStringDefault "| |1| |0|"
 
-        row `shouldBe` [Nothing, pawn2, Nothing, pawn1]
+        row `shouldBe` [Nothing, pawn1, Nothing, pawn0]
 
     describe "Invalid string" $ do
       it "raises exception" $ do
-        evaluate(buildRowFromStringDefault "| |1| |0|2|" !! 4)
+        evaluate(buildRowFromStringDefault "| |1| |0|2|3|4|" !! 6)
           `shouldThrow` anyException
+
+  describe "Player and PieceType" $ do
+
+    let
+        row = buildRowFromStringDefault "| |0|1|2|3|"
+        board = [row]
+
+    describe "Incorrect Player and PieceType" $ do
+
+      it "no piece, returns false" $ do
+          playerPieceType board player0 Pawn (0, 0) `shouldBe` False
+
+      it "wrong player, returns false" $ do
+          playerPieceType board player1 Pawn (0, 1) `shouldBe` False 
+
+      it "wrong piece, returns false" $ do
+          playerPieceType board player0 Queen (0, 1) `shouldBe` False 
+
+    describe "Correct Player and PieceType" $ do
+
+      it "Player 0 and Pawn" $ do
+          playerPieceType board player0 Pawn (0, 1) `shouldBe` True 
+
+      it "Player 1 and Pawn" $ do
+          playerPieceType board player1 Pawn (0, 2) `shouldBe` True 
+
+      it "Player 0 and Queen" $ do
+          playerPieceType board player0 Queen (0, 3) `shouldBe` True 
+
+      it "Player 1 and Queen" $ do
+          playerPieceType board player1 Queen (0, 4) `shouldBe` True 
+
+
