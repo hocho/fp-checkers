@@ -18,7 +18,8 @@ import Board
     ,   Position
     ,   boardSize
     ,   isValidPosition
-    ,   boardPiece, PieceType (Pawn)
+    ,   getPositions
+    ,   boardPiece, PieceType (Pawn), isPlayerPieceType
     )
 
 import Data.Maybe
@@ -31,50 +32,41 @@ data MoveSingle = MoveSingle
 
 isValidMove :: Board -> Player -> MoveSingle -> Bool
 isValidMove board movePlayer move =
-        let
-            fromPiece = boardPiece board (from move)
-            isFromPieceOfPlayer =
-                case fromPiece of
-                Just p
-                    ->  player p == movePlayer
-                        && pieceType p == Pawn
-                Nothing
-                    ->  False
-        in
-                isValidPosition (from move)
-            &&  isValidPosition (to move)
-            &&  isFromPieceOfPlayer
-            &&  isNothing(boardPiece board (to move))
+            isValidPosition (from move)
+        &&  isValidPosition (to move)
+        &&  isNothing(boardPiece board (to move))
 
 movesSingleGet :: Board -> Player -> [MoveSingle]
 movesSingleGet board player =
-    filter (isValidMove board player) moves
+    filter isValidPlayerMove moves
     where
+        isValidPlayerMove = isValidMove board player
         delta = case side player of
             North -> 1
             South -> -1
         createMove (row, col) deltaCol =
-            MoveSingle { from = (row, col), to = (row + delta, col + deltaCol) }
+            MoveSingle (row, col) (row + delta, col + deltaCol) 
         createMoves position =
             [   createMove position (-1)
             ,   createMove position 1
             ]
-        moves = concat $ [createMoves (row, col) | row <- [0 .. boardSize], col <- [0 .. boardSize]]
+        moves =
+            concatMap createMoves (getPositions board player Pawn)
 
 instance Move_ MoveSingle where
     movePlay :: Board -> MoveSingle -> Board
     movePlay board move =
-        let 
+        let
             movePiece = boardPiece board (from move)
-        in           
-            zipWith 
-                (\ idx row -> 
-                    if 
-                    | idx == fst (from move) -> 
+        in
+            zipWith
+                (\ idx row ->
+                    if
+                    | idx == fst (from move) ->
                         rowUpdate row (snd (from move)) Nothing
-                    | idx == fst (to move) -> 
+                    | idx == fst (to move) ->
                         rowUpdate row (snd (to move)) movePiece
-                    | otherwise -> 
+                    | otherwise ->
                         row)
             [0 ..] board
 

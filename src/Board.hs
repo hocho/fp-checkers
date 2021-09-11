@@ -55,18 +55,21 @@ instance Show Piece where
 type Position = (Int, Int)
 
 isValidPosition :: Position -> Bool
-isValidPosition (row, col) =
+isValidPosition pos@(row, col) =
         isValid row
     &&  
         isValid col
     &&  
-        odd (row  + col)
+        isValidSquare pos
     where
         isValid x =
                 x >= 0
             &&  
                 x < boardSize
     
+isValidSquare :: Position -> Bool 
+isValidSquare (row, col) = odd (row + col)
+
 type BoardRow = [Maybe Piece]
 type Board = [BoardRow]
 
@@ -106,13 +109,21 @@ boardPiece :: Board -> Position -> Maybe Piece
 boardPiece board (row, col) = board !! row !! col
 
 -- Returns true if the piece on the board position is of the player and the piece type
-playerPieceType :: Board -> Player -> PieceType -> Position -> Bool 
-playerPieceType board player pieceType position = 
+isPlayerPieceType :: Board -> Player -> PieceType -> Position -> Bool 
+isPlayerPieceType board player pieceType position = 
     case boardPiece board position of
         Nothing ->
             False 
         Just (Piece piecePlayer piecePieceType) -> 
             piecePlayer == player && piecePieceType == pieceType
+
+-- Returns all positions on the board which have the specified player and piece type
+getPositions :: Board -> Player -> PieceType -> [Position]
+getPositions board player pieceType =
+    filter selectPlayerPieceType validPositions
+    where
+        selectPlayerPieceType = isPlayerPieceType board player pieceType
+        validPositions = [(row, col) | row <- [0 .. boardSize - 1], col <- [0 .. boardSize - 1], isValidSquare(row, col)] 
 
 
 -- Row string is of the form "| |1| |0| | | |"
@@ -139,3 +150,4 @@ buildRowFromStringDefault str =
     where 
         pieces = array(0,3) $ zip [0 ..][fromJust pawn0, fromJust pawn1, fromJust queen0, fromJust queen1]
   
+emptyRow = replicate boardSize Nothing
