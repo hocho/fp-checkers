@@ -151,3 +151,19 @@ buildRowFromStringDefault str =
         pieces = array(0,3) $ zip [0 ..][fromJust pawn0, fromJust pawn1, fromJust queen0, fromJust queen1]
   
 emptyRow = replicate boardSize Nothing
+
+-- builds a board with the supplied rows, adds empty rows to round off the board
+-- does not validate
+buildBoardWithRows :: [BoardRow] -> Board
+buildBoardWithRows rows = 
+    buildBoardWithRows' rows boardSize
+    where 
+        buildBoardWithRows' [] 0 = 
+            []
+
+        buildBoardWithRows' [] count =
+            emptyRow : buildBoardWithRows' [] (count - 1)
+
+        buildBoardWithRows' (row : rows) count =
+            row : buildBoardWithRows' rows (count - 1)
+

@@ -28,19 +28,18 @@ data MoveSingle = MoveSingle
     {   from :: Position
     ,   to :: Position
     }
-    deriving (Show)
+    deriving (Show, Eq)
 
-isValidMove :: Board -> Player -> MoveSingle -> Bool
-isValidMove board movePlayer move =
+isValidMove :: Board -> MoveSingle -> Bool
+isValidMove board move =
             isValidPosition (from move)
         &&  isValidPosition (to move)
         &&  isNothing(boardPiece board (to move))
 
 movesSingleGet :: Board -> Player -> [MoveSingle]
 movesSingleGet board player =
-    filter isValidPlayerMove moves
+    filter (isValidMove board) moves
     where
-        isValidPlayerMove = isValidMove board player
         delta = case side player of
             North -> 1
             South -> -1
