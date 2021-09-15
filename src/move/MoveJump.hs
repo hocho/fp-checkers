@@ -16,10 +16,12 @@ import Board
     ,   Piece(..)
     ,   BoardRow
     ,   Position
+    ,   PieceType (Pawn)
     ,   boardSize
     ,   isValidPosition
     ,   boardPiece
-    ,   otherPlayer, Position
+    ,   otherPlayer
+    ,   getPositions
     )
     
 import Data.Maybe
@@ -42,13 +44,6 @@ calcJumpedPosition p1 p2 =
 isValidJump :: Board -> Player -> MoveJump -> Bool
 isValidJump board movePlayer move =
         let
-            fromPiece = boardPiece board (fromX move)
-            isFromPieceOfPlayer =
-                case fromPiece of
-                    Just p
-                        ->  player p == movePlayer
-                    Nothing
-                        ->  False
             jumpedOverPosition = calcJumpedPosition (fromX move) (toX move) 
             jumpOverPiece = boardPiece board jumpedOverPosition
             isJumpOverPieceOfOpponent =
@@ -60,7 +55,6 @@ isValidJump board movePlayer move =
         in
                 isValidPosition (fromX move)
             &&  isValidPosition (toX move)
-            &&  isFromPieceOfPlayer
             &&  isNothing(boardPiece board (toX move))
             &&  isJumpOverPieceOfOpponent
 
@@ -77,7 +71,7 @@ movesJumpGet board player =
             [   createJump position (-2) 
             ,   createJump position 2 
             ]
-        moves = concat $ [createMoves (row, col) | row <- [0 .. boardSize], col <- [0 .. boardSize]]
+        moves = concatMap createMoves (getPositions board player Pawn)
 
 instance Move_ MoveJump where 
     movePlay :: Board -> MoveJump -> Board  

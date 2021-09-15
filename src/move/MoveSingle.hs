@@ -16,10 +16,12 @@ import Board
     ,   Piece(..)
     ,   BoardRow
     ,   Position
+    ,   PieceType (Pawn)
     ,   boardSize
     ,   isValidPosition
     ,   getPositions
-    ,   boardPiece, PieceType (Pawn), isPlayerPieceType
+    ,   boardPiece
+    ,   isPlayerPieceType
     )
 
 import Data.Maybe
@@ -49,8 +51,7 @@ movesSingleGet board player =
             [   createMove position (-1)
             ,   createMove position 1
             ]
-        moves =
-            concatMap createMoves (getPositions board player Pawn)
+        moves = concatMap createMoves (getPositions board player Pawn)
 
 instance Move_ MoveSingle where
     movePlay :: Board -> MoveSingle -> Board

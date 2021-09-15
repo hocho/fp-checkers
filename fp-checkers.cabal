@@ -69,6 +69,7 @@ test-suite fp-checkers-test
       AnalyticsSpec
       BoardSpec
       MoveJumpSpec
+      MoveSingleSpec
       MoveSpec
       Paths_fp_checkers
   hs-source-dirs:
