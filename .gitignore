@@ -1,2 +1,4 @@
 .stack-work/
+dist-newstyle/
+# names ending in ~. Text editors use them in backup files.
 *~
